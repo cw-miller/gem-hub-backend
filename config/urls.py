@@ -16,4 +16,8 @@ urlpatterns = [
 
     # Redoc UI (alternative)
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
+    path('api/jobs/', include('apps.jobs.urls')),
+    path('api/gems/', include('apps.gems.urls')),
+    path('api/notifications/', include('apps.core.urls')),
 ]
