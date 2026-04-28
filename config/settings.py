@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "apps.core.middlewares.logging.LoggingMiddleware"
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -130,4 +132,121 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API for Job Market and Gem Market",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+}
+
+
+# Logger Implementation 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Create logs directory
+LOGS_DIR = BASE_DIR / 'logs'  # pathlib style
+LOGS_DIR.mkdir(exist_ok=True)
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    # ===== FORMATTERS =====
+    'formatters': {
+        # Simple for console
+        'simple': {
+            'format': '%(levelname)s %(message)s',
+        },
+        # Detailed for files
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        # JSON for enterprise/dashboards
+        'json': {
+            'format': '{"timestamp": "%(asctime)s", "level": "%(levelname)s", "message": "%(message)s"}',
+            'datefmt': '%Y-%m-%dT%H:%M:%S',
+        },
+    },
+
+    # ===== HANDLERS =====
+    'handlers': {
+        # Console output
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+            'level': 'DEBUG',
+        },
+
+        # General app logs (rotating)
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'app.log',
+            'formatter': 'verbose',
+            'level': 'INFO',
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 5,
+        },
+
+        # Error logs only
+        'error_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'error.log',
+            'formatter': 'verbose',
+            'level': 'ERROR',
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 5,
+        },
+
+        # Request logs (separate file)
+        'request_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'requests.log',
+            'formatter': 'verbose',
+            'level': 'INFO',
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
+            'backupCount': 10,
+        },
+    },
+
+    # ===== LOGGERS =====
+    'loggers': {
+        # Django's internal logs
+        'django': {
+            'handlers': ['console', 'file', 'error_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+        # Django requests (404s, 500s, etc)
+        'django.request': {
+            'handlers': ['console', 'error_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+
+        # Database queries (turn on for debugging)
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'WARNING',  # change to DEBUG to see all queries
+            'propagate': False,
+        },
+
+        # Your apps
+        'apps': {
+            'handlers': ['console', 'file', 'error_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+
+        # Your middleware specifically
+        'apps.core.middlewares': {
+            'handlers': ['console', 'request_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+
+    # ===== ROOT LOGGER (catches everything else) =====
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
 }
