@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('gems', '0001_initial'),
+        ("gems", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='gemlisting',
-            name='owner_id',
+            model_name="gemlisting",
+            name="owner_id",
             field=models.UUIDField(db_index=True, editable=False),
         ),
     ]

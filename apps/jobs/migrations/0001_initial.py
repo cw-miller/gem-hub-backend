@@ -5,44 +5,65 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Job',
+            name="Job",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('employer_id', models.UUIDField()),
-                ('title', models.TextField()),
-                ('company_info', models.TextField(blank=True, null=True)),
-                ('salary', models.TextField(blank=True, null=True)),
-                ('tags', models.TextField(blank=True, null=True)),
-                ('logo_color', models.IntegerField(blank=True, null=True)),
-                ('status', models.TextField(default='open')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("employer_id", models.UUIDField()),
+                ("title", models.TextField()),
+                ("company_info", models.TextField(blank=True, null=True)),
+                ("salary", models.TextField(blank=True, null=True)),
+                ("tags", models.TextField(blank=True, null=True)),
+                ("logo_color", models.IntegerField(blank=True, null=True)),
+                ("status", models.TextField(default="open")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'db_table': 'jobs',
+                "db_table": "jobs",
             },
         ),
         migrations.CreateModel(
-            name='Application',
+            name="Application",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('applicant_id', models.UUIDField()),
-                ('phone', models.TextField(blank=True, null=True)),
-                ('expected_salary', models.TextField(blank=True, null=True)),
-                ('cv_url', models.TextField(blank=True, null=True)),
-                ('status', models.TextField(default='pending')),
-                ('applied_at', models.DateTimeField(auto_now_add=True)),
-                ('job', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='applications', to='jobs.job')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("applicant_id", models.UUIDField()),
+                ("phone", models.TextField(blank=True, null=True)),
+                ("expected_salary", models.TextField(blank=True, null=True)),
+                ("cv_url", models.TextField(blank=True, null=True)),
+                ("status", models.TextField(default="pending")),
+                ("applied_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "job",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="applications",
+                        to="jobs.job",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'applications',
+                "db_table": "applications",
             },
         ),
     ]

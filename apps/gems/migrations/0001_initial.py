@@ -4,30 +4,36 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='GemListing',
+            name="GemListing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('owner_id', models.UUIDField()),
-                ('name', models.TextField()),
-                ('carat', models.FloatField(blank=True, null=True)),
-                ('price', models.FloatField(blank=True, null=True)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('image_url', models.TextField(blank=True, null=True)),
-                ('location', models.TextField(blank=True, null=True)),
-                ('seller_phone', models.TextField(blank=True, null=True)),
-                ('status', models.TextField(default='pending')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("owner_id", models.UUIDField()),
+                ("name", models.TextField()),
+                ("carat", models.FloatField(blank=True, null=True)),
+                ("price", models.FloatField(blank=True, null=True)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("image_url", models.TextField(blank=True, null=True)),
+                ("location", models.TextField(blank=True, null=True)),
+                ("seller_phone", models.TextField(blank=True, null=True)),
+                ("status", models.TextField(default="pending")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'db_table': 'gem_listings',
+                "db_table": "gem_listings",
             },
         ),
     ]

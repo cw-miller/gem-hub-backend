@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('jobs', '0001_initial'),
+        ("jobs", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='application',
-            name='applicant_id',
+            model_name="application",
+            name="applicant_id",
             field=models.UUIDField(db_index=True, editable=False),
         ),
         migrations.AlterField(
-            model_name='job',
-            name='employer_id',
+            model_name="job",
+            name="employer_id",
             field=models.UUIDField(db_index=True, editable=False),
         ),
     ]

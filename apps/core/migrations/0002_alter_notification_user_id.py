@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='notification',
-            name='user_id',
+            model_name="notification",
+            name="user_id",
             field=models.UUIDField(db_index=True, editable=False),
         ),
     ]

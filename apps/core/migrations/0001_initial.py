@@ -4,25 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Notification',
+            name="Notification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_id', models.UUIDField()),
-                ('title', models.TextField()),
-                ('message', models.TextField()),
-                ('time', models.DateTimeField(auto_now_add=True)),
-                ('is_read', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user_id", models.UUIDField()),
+                ("title", models.TextField()),
+                ("message", models.TextField()),
+                ("time", models.DateTimeField(auto_now_add=True)),
+                ("is_read", models.BooleanField(default=False)),
             ],
             options={
-                'db_table': 'notifications',
+                "db_table": "notifications",
             },
         ),
     ]
