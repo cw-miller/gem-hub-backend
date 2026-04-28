@@ -141,3 +141,5 @@ GitHub.sublime-settings
 
 # Other
 supabase
+logs
+.ruff_cache
