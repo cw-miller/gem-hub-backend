@@ -7,17 +7,17 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
+    # admin dashboard 
     path('admin/', admin.site.urls),
-        # API Schema
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 
-    # Swagger UI
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # documentation
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/v1/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
-    # Redoc UI (alternative)
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    # rest endpoints
+    path('api/v1/', include('apps.gems.urls')),
+    path('api/v1/', include('apps.core.urls')),
+    path('api/v1/', include('apps.jobs.urls')),
 
-    path('api/jobs/', include('apps.jobs.urls')),
-    path('api/gems/', include('apps.gems.urls')),
-    path('api/notifications/', include('apps.core.urls')),
 ]
