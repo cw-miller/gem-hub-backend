@@ -1,10 +1,10 @@
 from django.db import models
+from apps.core.models import Profile
+import uuid
 
 
 class GemListing(models.Model):
-    owner_id = models.UUIDField(
-        db_index=True, editable=False
-    )  # references profiles.id (UUID) from Supabase
+    owner = models.ForeignKey(Profile, default=uuid.uuid4, on_delete=models.CASCADE)
     name = models.TextField()
     carat = models.FloatField(null=True, blank=True)
     price = models.FloatField(null=True, blank=True)
