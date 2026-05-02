@@ -37,6 +37,7 @@ DEBUG = env('DJ_DEBUG')
 
 ALLOWED_HOSTS = []
 
+SUPABASE_JWT_SECRET = "your-supabase-jwt-secret"
 
 # Application definition
 
@@ -148,6 +149,12 @@ STATIC_URL = "static/"
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'apps.core.authentication.supabase_auth.SupabaseAuth',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
