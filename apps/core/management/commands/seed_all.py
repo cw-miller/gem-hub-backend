@@ -1,4 +1,5 @@
 import random
+import uuid
 from django.core.management.base import BaseCommand
 from django.apps import apps
 from faker import Faker
@@ -15,11 +16,16 @@ class Command(BaseCommand):
         Job = apps.get_model('jobs', 'Job')
         Application = apps.get_model('jobs', 'Application')
 
-        # 2. Get or Create the specific Profile
-        target_uuid = "a614ed82-1074-459f-8172-311c75aa6f09"
+        # 2. Get or Create the specific Profile using your provided UUID
+        target_auth_uuid = "86c56dfb-eee7-4ec9-87f9-649f747ac70a"
         user_profile, _ = Profile.objects.get_or_create(
-            profile=target_uuid,
-            defaults={"username": f"gem_trader_{random.randint(1, 999)}"}
+            profile_id=target_auth_uuid,
+            defaults={
+                "id": uuid.uuid4(),
+                "username": f"gem_trader_{random.randint(1, 999)}",
+                "email": f"tester_{random.randint(1, 99)}@gemhub.com",
+                "role": "USER"
+            }
         )
 
         # 3. Seed GEMS
@@ -27,6 +33,7 @@ class Command(BaseCommand):
         for i in range(1, 11):
             try:
                 GemListing.objects.create(
+                    gem_id=uuid.uuid4(), # Matches your model field
                     owner=user_profile,
                     name=f"Natural {fake.color_name().capitalize()} {random.choice(['Sapphire', 'Ruby', 'Emerald'])}",
                     carat=round(random.uniform(0.5, 8.0), 2),
@@ -35,7 +42,6 @@ class Command(BaseCommand):
                     image_url=f"https://picsum.photos/seed/gem{i}/600/400",
                     location=f"{fake.city()}, Sri Lanka",
                     seller_phone=fake.phone_number()[:15],
-                    # Using the new GemStatus Enum
                     status=random.choice(GemListing.GemStatus.values)
                 )
                 self.stdout.write(f"Created Gem {i}/10")
@@ -48,25 +54,25 @@ class Command(BaseCommand):
             try:
                 # Create the Job
                 new_job = Job.objects.create(
+                    job_id=uuid.uuid4(), # Matches your model field
                     employer=user_profile,
                     title=f"Expert {fake.job()}",
                     company_info=fake.company(),
                     salary=float(random.randint(40000, 120000)),
                     tags="Gemology, Certification, Full-time",
                     logo_color=random.randint(0, 16777215),
-                    # Using the new JobStatus Enum
                     status=random.choice(Job.JobStatus.values)
                 )
                 self.stdout.write(f"Created Job {i}/10")
 
                 # Create an Application for THIS specific job
                 Application.objects.create(
+                    application_id=uuid.uuid4(), # Matches your model field
                     job=new_job, 
                     applicant=user_profile,
                     phone=fake.phone_number()[:15],
                     expected_salary=new_job.salary + 5000.0,
                     cv_url=f"https://example.com/cvs/resume_{i}.pdf",
-                    # Using the new ApplicationStatus Enum
                     status=random.choice(Application.ApplicationStatus.values)
                 )
                 self.stdout.write(f"   -> Created Application for Job #{i}")
