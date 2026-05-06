@@ -1,14 +1,19 @@
 from django.db import models
 import uuid
 
+import uuid
+from django.db import models
+
 class Profile(models.Model):
-    
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
         USER = "USER", "User"
 
-
-    profile_id = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
+    # ✅ THE FIX: primary_key=True
+    # This makes 'profile' the actual ID. Django's hidden BigInt 'id' is removed.
+    # We remove 'default=uuid.uuid4' because Supabase provides this ID.
+    profile = models.UUIDField(primary_key=True, editable=False)
+    
     username = models.CharField(max_length=50, unique=True, null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     avatar_url = models.TextField(null=True, blank=True)
@@ -21,8 +26,8 @@ class Profile(models.Model):
         db_table = "profiles"
 
     def __str__(self):
-        return self.username or str(self.id)
-
+        # We use self.profile now because self.id no longer exists
+        return self.username or str(self.profile)
 
 class Notification(models.Model):
     user = models.ForeignKey(Profile, default=uuid.uuid4, on_delete=models.CASCADE)

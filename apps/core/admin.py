@@ -20,14 +20,14 @@ class NotificationAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
-        "profile_id",
+        "profile",
         "username",
         "phone",
         "created_at",
         "updated_at",
     )
 
-    search_fields = ("profile_id", "username", "phone", "description")
+    search_fields = ("profile", "username", "phone", "description")
     list_filter = ("created_at", "updated_at")
     ordering = ("-created_at",)
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("profile", "created_at", "updated_at")
