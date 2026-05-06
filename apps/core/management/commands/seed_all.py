@@ -35,7 +35,7 @@ class Command(BaseCommand):
                 GemListing.objects.create(
                     gem_id=uuid.uuid4(), # Matches your model field
                     owner=user_profile,
-                    name=f"Natural {fake.color_name().capitalize()} {random.choice(['Sapphire', 'Ruby', 'Emerald'])}",
+                    name=f"{random.choice(['Sapphire', 'Ruby', 'Emerald'])}",
                     carat=round(random.uniform(0.5, 8.0), 2),
                     price=float(random.randint(800, 10000)),
                     description=fake.paragraph(nb_sentences=3),

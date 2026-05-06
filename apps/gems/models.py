@@ -15,10 +15,13 @@ class GemListing(models.Model):
     name = models.TextField()
     carat = models.FloatField(null=True, blank=True)
     price = models.FloatField(null=True, blank=True)
+    variety = models.TextField(null=True, blank=True, default="Variety")
+    color = models.TextField(null=True, blank=True, default="Blue")
     description = models.TextField(null=True, blank=True)
     image_url = models.TextField(null=True, blank=True)
     location = models.TextField(null=True, blank=True)
     seller_phone = models.TextField(null=True, blank=True)
+    certificate_url = models.TextField(null=True, blank=True, default=" https://www.orimi.com/pdf-test.pdf")
     status = models.TextField(
         choices=GemStatus.choices,
         default=GemStatus.PENDING
