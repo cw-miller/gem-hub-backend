@@ -5,7 +5,7 @@ from .models import Job, Application
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
+        "job_id",
         "title",
         "employer_id",
         "salary",
@@ -21,7 +21,7 @@ class JobAdmin(admin.ModelAdmin):
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
+        "application_id",
         "job",
         "applicant_id",
         "phone",

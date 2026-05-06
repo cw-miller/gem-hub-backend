@@ -5,7 +5,7 @@ from .models import GemListing
 @admin.register(GemListing)
 class GemListingAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
+        "gem_id",
         "name",
         "owner_id",
         "carat",

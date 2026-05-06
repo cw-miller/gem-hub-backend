@@ -23,7 +23,11 @@ env = environ.Env(
 )
 
 # Read .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env_file = os.path.join(BASE_DIR, '.env')
+if os.path.exists(env_file):
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+else:
+    print(f"CRITICAL: .env file not found at {env_file}")
 
 
 # Quick-start development settings - unsuitable for production
@@ -89,26 +93,26 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': env('DJ_ENGINE'),
-#         'HOST': env('DJ_HOST'),
-#         'NAME': env('DJ_NAME'),
-#         'USER': env('DJ_USER'),
-#         'PORT': env('DJ_PORT'),
-#         'PASSWORD': env('DJ_PASSWORD'),
-#         "OPTIONS": {
-#             "sslmode": "require",
-#         },
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': env('DJ_ENGINE'),
+        'HOST': env('DJ_HOST'),
+        'NAME': env('DJ_NAME'),
+        'USER': env('DJ_USER'),
+        'PORT': env('DJ_PORT'),
+        'PASSWORD': env('DJ_PASSWORD'),
+        "OPTIONS": {
+            "sslmode": "require",
+        },
+    }
+}
 
 
 # Password validation

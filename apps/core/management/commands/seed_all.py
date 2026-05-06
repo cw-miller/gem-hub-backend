@@ -4,7 +4,7 @@ from django.apps import apps
 from faker import Faker
 
 class Command(BaseCommand):
-    help = 'Seeds multiple entries and prints progress'
+    help = 'Seeds Gems, Jobs, and Applications using Enums and linked ForeignKeys'
 
     def handle(self, *args, **options):
         fake = Faker()
@@ -15,44 +15,63 @@ class Command(BaseCommand):
         Job = apps.get_model('jobs', 'Job')
         Application = apps.get_model('jobs', 'Application')
 
-        # 2. Get the Profile (Supabase UUID)
+        # 2. Get or Create the specific Profile
         target_uuid = "a614ed82-1074-459f-8172-311c75aa6f09"
         user_profile, _ = Profile.objects.get_or_create(
             profile=target_uuid,
-            defaults={"username": f"user_{random.randint(1, 999)}"}
+            defaults={"username": f"gem_trader_{random.randint(1, 999)}"}
         )
 
-        # 3. Seed GEMS in a loop
+        # 3. Seed GEMS
         self.stdout.write("--- Starting Gem Seeding ---")
-        for i in range(1, 11): # This ensures it runs 10 times
+        for i in range(1, 11):
             try:
                 GemListing.objects.create(
                     owner=user_profile,
-                    name=f"{fake.color_name().capitalize()} {random.choice(['Sapphire', 'Ruby', 'Emerald'])} #{i}",
-                    carat=round(random.uniform(1.0, 5.0), 2),
-                    price=float(random.randint(1000, 5000)),
-                    description=fake.sentence(),
-                    location=fake.city(),
-                    status="active"
+                    name=f"Natural {fake.color_name().capitalize()} {random.choice(['Sapphire', 'Ruby', 'Emerald'])}",
+                    carat=round(random.uniform(0.5, 8.0), 2),
+                    price=float(random.randint(800, 10000)),
+                    description=fake.paragraph(nb_sentences=3),
+                    image_url=f"https://picsum.photos/seed/gem{i}/600/400",
+                    location=f"{fake.city()}, Sri Lanka",
+                    seller_phone=fake.phone_number()[:15],
+                    # Using the new GemStatus Enum
+                    status=random.choice(GemListing.GemStatus.values)
                 )
                 self.stdout.write(f"Created Gem {i}/10")
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Failed to create Gem {i}: {e}"))
 
-        # 4. Seed JOBS in a loop
-        self.stdout.write("--- Starting Job Seeding ---")
+        # 4. Seed JOBS & Applications
+        self.stdout.write("--- Starting Job & Application Seeding ---")
         for i in range(1, 11):
             try:
-                Job.objects.create(
+                # Create the Job
+                new_job = Job.objects.create(
                     employer=user_profile,
-                    title=f"{fake.job()} Position #{i}",
+                    title=f"Expert {fake.job()}",
                     company_info=fake.company(),
-                    salary=float(random.randint(50000, 100000)),
-                    status="open",
-                    logo_color=random.randint(0, 16777215)
+                    salary=float(random.randint(40000, 120000)),
+                    tags="Gemology, Certification, Full-time",
+                    logo_color=random.randint(0, 16777215),
+                    # Using the new JobStatus Enum
+                    status=random.choice(Job.JobStatus.values)
                 )
                 self.stdout.write(f"Created Job {i}/10")
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Failed to create Job {i}: {e}"))
 
-        self.stdout.write(self.style.SUCCESS('Seeding process finished!'))
+                # Create an Application for THIS specific job
+                Application.objects.create(
+                    job=new_job, 
+                    applicant=user_profile,
+                    phone=fake.phone_number()[:15],
+                    expected_salary=new_job.salary + 5000.0,
+                    cv_url=f"https://example.com/cvs/resume_{i}.pdf",
+                    # Using the new ApplicationStatus Enum
+                    status=random.choice(Application.ApplicationStatus.values)
+                )
+                self.stdout.write(f"   -> Created Application for Job #{i}")
+
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Failed at Job/App index {i}: {e}"))
+
+        self.stdout.write(self.style.SUCCESS('Seeding complete with updated Enum values!'))

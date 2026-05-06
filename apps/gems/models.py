@@ -2,9 +2,16 @@ from django.db import models
 from apps.core.models import Profile
 import uuid
 
-
 class GemListing(models.Model):
-    owner = models.ForeignKey(Profile, default=uuid.uuid4, on_delete=models.CASCADE)
+    # Enums for Gem Status
+    class GemStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        APPROVED = "approved", "Approved"
+        REJECTED = "rejected", "Rejected"
+
+    gem_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # Removed default=uuid.uuid4 from owner to ensure data integrity
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     name = models.TextField()
     carat = models.FloatField(null=True, blank=True)
     price = models.FloatField(null=True, blank=True)
@@ -12,7 +19,10 @@ class GemListing(models.Model):
     image_url = models.TextField(null=True, blank=True)
     location = models.TextField(null=True, blank=True)
     seller_phone = models.TextField(null=True, blank=True)
-    status = models.TextField(default="pending")
+    status = models.TextField(
+        choices=GemStatus.choices,
+        default=GemStatus.PENDING
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
