@@ -39,7 +39,7 @@ SECRET_KEY = env('DJ_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DJ_DEBUG')
 
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ALLOWED_HOSTS = env.list('DJ_ALLOWED_HOSTS', default=['10.0.2.2', 'localhost', '127.0.0.1', '.azurewebsites.net'])
 
 SUPABASE_JWT_SECRET = "your-supabase-jwt-secret"
 
